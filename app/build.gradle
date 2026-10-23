@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.application'
+}
+
+def appVersion = "1.0.0"
+
+android {
+    namespace 'com.sing1.apply'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.sing1.apply"
+        minSdk 30
+        targetSdk 34
+        versionCode 1
+        versionName appVersion
+    }
+
+    // 仓库内自带的签名文件（开源项目，密钥公开）
+    signingConfigs {
+        release {
+            storeFile file("apply.keystore")
+            storePassword "123456"
+            keyAlias "apply"
+            keyPassword "123456"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+// 打包产物统一输出到 仓库根目录/apk/森林助手-<版本>.apk
+tasks.register("copyApk", Copy) {
+    from layout.buildDirectory.dir("outputs/apk/release")
+    include "*.apk"
+    into rootProject.layout.projectDirectory.dir("apk")
+    rename { "森林助手-${appVersion}.apk" }
+}
+
+afterEvaluate {
+    tasks.named("assembleRelease").configure { finalizedBy("copyApk") }
+}

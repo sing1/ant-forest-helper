@@ -1,0 +1,20 @@
+# 构建产物
+*.aab
+build/
+app/build/
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+
+# 本地环境（含本机 SDK 路径，不要提交）
+local.properties
+
+# IDE / 系统
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
